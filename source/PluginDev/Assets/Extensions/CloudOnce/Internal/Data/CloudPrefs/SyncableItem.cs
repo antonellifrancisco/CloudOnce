@@ -107,7 +107,7 @@ namespace CloudOnce.Internal
         public JSONObject ToJSONObject()
         {
             var jsonObject = new JSONObject(JSONObject.Type.Object);
-            jsonObject.AddField(aliasValueString, ValueString.ToString(CultureInfo.InvariantCulture));
+            jsonObject.AddField(aliasValueString, ValueString.ToString(CultureInfo.InvariantCulture)).Replace("\"", "\\\"");
             jsonObject.AddField(aliasMetadata, Metadata.ToJSONObject());
 
             return jsonObject;
@@ -122,7 +122,7 @@ namespace CloudOnce.Internal
             var valueStringAlias = CloudOnceUtils.GetAlias(typeof(SyncableItem).Name, jsonObject, aliasValueString, oldAliasValueString);
             var metaDataAlias = CloudOnceUtils.GetAlias(typeof(SyncableItem).Name, jsonObject, aliasMetadata, oldAliasMetadata);
 
-            valueString = jsonObject[valueStringAlias].String;
+            valueString = jsonObject[valueStringAlias].String.Replace("\\\"", "\"");
             Metadata = new SyncableItemMetaData(jsonObject[metaDataAlias]);
         }
 
